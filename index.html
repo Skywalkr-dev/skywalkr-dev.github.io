@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>naveen@arch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --desk:   #0d0d12;
+  --win:    #12121a;
+  --win2:   #15151f;
+  --tbar:   #0f0f18;
+  --bact:   #5eead4;
+  --binact: #1f1f30;
+  --grn:    #a6e3a1;
+  --grn-d:  #4d9e78;
+  --grn-m:  #1a3d2a;
+  --teal:   #5eead4;
+  --teal-d: #2dd4bf;
+  --teal-m: #1a3d38;
+  --sky:    #89dceb;
+  --yellow: #f9e2af;
+  --mauve:  #cba6f7;
+  --red:    #f38ba8;
+  --txt:    #cdd6f4;
+  --txt-d:  #585b70;
+  --txt-m:  #1e2030;
+  --gap:    8px;
+  --rad:    10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  height: 100vh; width: 100vw; overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; line-height: 1.55;
+  color: var(--txt);
+  background: var(--desk);
+}
+
+body {
+  background-color: var(--desk);
+  background-image: radial-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.bar {
+  height: 30px;
+  background: rgba(10,10,16,.92);
+  border-bottom: 1px solid var(--binact);
+  display: flex; align-items: center;
+  padding: 0 12px; gap: 0;
+  flex-shrink: 0;
+  backdrop-filter: blur(8px);
+  position: relative;
+}
+
+.bar-l { display: flex; align-items: center; gap: 2px; }
+.bar-c {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: var(--txt-d); letter-spacing: .06em;
+}
+.bar-r { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 9.5px; }
+
+.ws {
+  width: 26px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 5px; font-size: 10px; cursor: default;
+  letter-spacing: .02em;
+}
+.ws.on  { background: var(--teal-m); color: var(--teal); border: 1px solid var(--teal-d); }
+.ws.off { color: var(--txt-d); }
+
+.bsep { color: var(--txt-m); }
+.bstat { color: var(--txt-d); }
+.bstat b { color: var(--txt); font-weight: 400; }
+.btime { color: var(--teal); font-weight: 500; letter-spacing: .04em; }
+
+.desk {
+  height: calc(100vh - 30px);
+  padding: var(--gap);
+  display: flex; gap: var(--gap);
+  overflow: hidden;
+}
+
+.win {
+  background: var(--win);
+  border: 1px solid var(--binact);
+  border-radius: var(--rad);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.win.act { border-color: var(--bact); }
+
+.wbar {
+  height: 28px; background: var(--tbar);
+  border-bottom: 1px solid rgba(0,0,0,.35);
+  display: flex; align-items: center;
+  padding: 0 11px; gap: 8px; flex-shrink: 0;
+}
+.wdots { display: flex; gap: 6px; }
+.wd { width: 10px; height: 10px; border-radius: 50%; }
+
+.win:not(.act) .wd { background: transparent; }
+.win:not(.act) .wd-r { border: 1px solid #f38ba855; }
+.win:not(.act) .wd-y { border: 1px solid #f9e2af55; }
+.win:not(.act) .wd-g { border: 1px solid #a6e3a155; }
+
+.win.act .wd-r { background: #f38ba8; }
+.win.act .wd-y { background: #f9e2af; }
+.win.act .wd-g { background: #a6e3a1; }
+
+.wt { font-size: 10px; letter-spacing: .04em; }
+.win:not(.act) .wt { color: var(--txt-d); }
+.win.act .wt { color: var(--txt); }
+
+.col-l { width: 248px; flex-shrink: 0; overflow-y: auto; }
+.col-l .win { height: 100%; }
+.col-l .wbody {
+  flex: 1; overflow-y: auto;
+  padding: 13px 14px;
+  display: flex; flex-direction: column;
+  scrollbar-width: none;
+}
+.col-l .wbody::-webkit-scrollbar { display: none; } 
+
+.name {
+  font-size: 19px; font-weight: 700;
+  color: var(--teal); letter-spacing: .03em;
+  line-height: 1.1; margin-bottom: 3px;
+}
+.role-lbl { color: var(--txt-d); font-size: 9px; letter-spacing: .12em; margin-bottom: 8px; }
+.avail { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--txt-d); }
+.dot-pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--grn); flex-shrink: 0;
+  animation: pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.15} }
+
+.div { height: 1px; background: var(--binact); margin: 10px 0; flex-shrink: 0; }
+
+.slbl { font-size: 8.5px; color: var(--txt-d); letter-spacing: .14em; margin-bottom: 5px; }
+
+.about { font-size: 9.5px; color: var(--txt-d); line-height: 1.65; }
+.sg { margin-bottom: 7px; }
+.sg:last-child { margin-bottom: 0; }
+.sg-h { font-size: 8px; color: var(--yellow); letter-spacing: .12em; margin-bottom: 3px; font-weight: 500; }
+.tags { display: flex; flex-wrap: wrap; gap: 3px; }
+.tag {
+  border: 1px solid var(--binact); color: var(--txt-d);
+  font-size: 8px; padding: 1px 6px; border-radius: 3px;
+}
+.tag.hi { border-color: var(--grn-m); color: var(--grn-d); }
+
+.lnk {
+  display: flex; align-items: center; gap: 7px;
+  color: var(--txt-d); text-decoration: none;
+  font-size: 9.5px; padding: 2.5px 0;
+  transition: color .15s;
+}
+.lnk:hover { color: var(--teal); }
+.li { color: var(--grn-m); width: 10px; text-align: center; font-size: 10px; flex-shrink: 0; }
+
+.col-r { flex: 1; display: flex; flex-direction: column; gap: var(--gap); overflow: hidden; }
+
+.win-exp { flex-shrink: 0; }
+.win-exp .wbody {
+  padding: 10px 14px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+
+.exp-co { font-size: 9.5px; font-weight: 400; color: var(--txt-d); letter-spacing: .05em; }
+.exp-role { font-size: 9px; color: var(--txt); margin-top: 2px; }
+.exp-date { font-size: 8px; color: var(--txt-d); opacity: .55; margin-top: 2px; }
+.exp-note {
+  margin-top: 4px; font-size: 8px; color: var(--txt-d); opacity: .7;
+  display: flex; align-items: flex-start; gap: 4px; line-height: 1.5;
+}
+.exp-note::before { content: '▸'; color: var(--grn-d); flex-shrink: 0; margin-top: 1px; }
+
+.win-proj { flex: 1; }
+.win-proj .wbody { flex: 1; padding: 8px 10px; overflow: hidden; }
+
+.pgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: var(--gap);
+  height: 100%;
+}
+
+.card {
+  background: var(--win2);
+  border: 1px solid var(--binact);
+  border-radius: 7px;
+  padding: 10px 11px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transition: border-color .2s, background .2s;
+}
+.card:hover { border-color: var(--teal-d); background: #17172200; }
+
+.c-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; margin-bottom: 4px;
+}
+.c-num { font-size: 8px; color: var(--txt-m); letter-spacing: .1em; }
+.c-focus { font-size: 7.5px; color: var(--txt-d); opacity: .7; text-align: right; max-width: 110px; }
+
+.c-name {
+  font-size: 11px; font-weight: 600; color: var(--txt);
+  margin-bottom: 4px; line-height: 1.25;
+  transition: color .2s;
+}
+.card:hover .c-name { color: var(--teal); }
+
+.c-tech { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 5px; }
+.tb {
+  border: 1px solid var(--teal-m); color: var(--teal-d);
+  font-size: 7.5px; padding: 1px 5px; border-radius: 2px;
+}
+.tb.a { border-color: var(--binact); color: var(--txt-d); }
+
+.c-desc {
+  font-size: 8.5px; color: var(--txt-d); line-height: 1.6;
+  flex: 1; overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+}
+
+.c-foot {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding-top: 6px; margin-top: auto;
+}
+.c-stat { display: flex; align-items: center; gap: 4px; font-size: 8px; color: var(--txt-d); }
+.si { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.si-g { background: var(--grn); }
+.si-t { background: var(--teal); }
+.si-y { background: var(--yellow); }
+.pat {
+  background: rgba(249,226,175,.07);
+  border: 1px solid rgba(249,226,175,.3);
+  color: var(--yellow); font-size: 7px;
+  padding: 1px 4px; border-radius: 2px;
+  font-weight: 700; letter-spacing: .06em;
+}
+.c-arr { font-size: 9px; color: var(--txt-m); transition: color .2s, transform .2s; }
+.card:hover .c-arr { color: var(--teal); transform: translateX(2px); }
+</style>
+</head>
+<body>
+
+<!-- WAYBAR -->
+<div class="bar">
+  <div class="bar-l">
+    <div class="ws on">1</div>
+    <div class="ws off">2</div>
+    <div class="ws off">3</div>
+    <div class="ws off">4</div>
+  </div>
+  <div class="bar-c">naveen@arch &nbsp;—&nbsp; ~/portfolio</div>
+  <div class="bar-r">
+    <span class="bstat">cpu <b id="cpu">3%</b></span>
+    <span class="bsep">·</span>
+    <span class="bstat">mem <b>2.1G</b></span>
+    <span class="bsep">·</span>
+    <span class="bstat"><b id="bdate">Fri 22 May</b></span>
+    <span class="bsep">·</span>
+    <span class="btime" id="clk">00:00:00</span>
+  </div>
+</div>
+
+<!-- DESKTOP (with gaps between windows) -->
+<div class="desk">
+
+  <!-- LEFT: identity, about, skills, links -->
+  <div class="col-l">
+    <div class="win">
+      <div class="wbar">
+        <div class="wdots"><div class="wd wd-r"></div><div class="wd wd-y"></div><div class="wd wd-g"></div></div>
+        <span class="wt">~/whoami</span>
+      </div>
+      <div class="wbody">
+
+        <div class="name">NAVEEN<br>BHARATH</div>
+        <div class="role-lbl">BACKEND · SYSTEMS · INFRASTRUCTURE</div>
+        <div class="avail"><div class="dot-pulse"></div><span>open to roles</span></div>
+
+        <div class="div"></div>
+
+        <div class="slbl">ABOUT</div>
+        <div class="about">Systems &amp; Backend Engineer. Working actively on low-level tooling, linux infrastructure, distributed systems, and building performant backends.</div>
+
+        <div class="div"></div>
+
+        <div class="slbl">SKILLS</div>
+        <div>
+          <div class="sg">
+            <div class="sg-h">LANGUAGES</div>
+            <div class="tags">
+              <span class="tag hi">Rust</span><span class="tag hi">C</span><span class="tag hi">C++</span>
+              <span class="tag hi">Go</span><span class="tag">Python</span><span class="tag">Bash</span>
+            </div>
+          </div>
+          <div class="sg">
+            <div class="sg-h">SYSTEMS</div>
+            <div class="tags">
+              <span class="tag">Linux</span><span class="tag">Virtualisation</span><span class="tag">Socket I/O</span><span class="tag">gRPC</span>
+            </div>
+          </div>
+          <div class="sg">
+            <div class="sg-h">CLOUD / OPS</div>
+            <div class="tags">
+              <span class="tag">Docker</span><span class="tag">K8s</span><span class="tag">AWS</span>
+              <span class="tag">Ansible</span><span class="tag">Nginx</span><span class="tag">CI/CD</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="div"></div>
+
+        <div class="slbl">CONTACT</div>
+        <a class="lnk" href="https://github.com/Skywalkr-dev" target="_blank"><span class="li">⌥</span>github.com/Skywalkr-dev</a>
+        <a class="lnk" href="https://linkedin.com/in/naveen-bharath-s" target="_blank"><span class="li">▸</span>linkedin/naveen-bharath-s</a>
+        <a class="lnk" href="https://leetcode.com/u/Skywalkr-dev/" target="_blank"><span class="li">◈</span>leetcode/Skywalkr-dev</a>
+        <a class="lnk" href="mailto:snaveenbharath2005@gmail.com"><span class="li">✉</span>snaveenbharath2005@gmail.com</a>
+        <a class="lnk" href="https://x.com/nav_py" target="_blank"><span class="li">✕</span>x.com/nav_py</a>
+
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="col-r">
+
+    <!-- experience window -->
+    <div class="win win-exp">
+      <div class="wbar">
+        <div class="wdots"><div class="wd wd-r"></div><div class="wd wd-y"></div><div class="wd wd-g"></div></div>
+        <span class="wt">experience.log</span>
+      </div>
+      <div class="wbody">
+        <div>
+          <div class="exp-co">TRIVENT SYSTEMS PVT LTD</div>
+          <div class="exp-role">Infrastructure &amp; Backend Intern</div>
+          <div class="exp-date">May 2026 – Present · Chennai</div>
+          <div class="exp-note">CI/CD pipelines · AWS microservices · Docker &amp; Kubernetes orchestration</div>
+        </div>
+        <div>
+          <div class="exp-co">INTEGRITY-IT TECHNOLOGIES</div>
+          <div class="exp-role">Software Development Intern</div>
+          <div class="exp-date">Sept – Nov 2025 · Remote</div>
+          <div class="exp-note">React Native modules · API layer caching · runtime crash reduction 15%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- projects window (active) -->
+    <div class="win win-proj act">
+      <div class="wbar">
+        <div class="wdots"><div class="wd wd-r"></div><div class="wd wd-y"></div><div class="wd wd-g"></div></div>
+        <span class="wt">~/projects &nbsp;·&nbsp; 6 entries</span>
+      </div>
+      <div class="wbody">
+        <div class="pgrid">
+
+          <div class="card">
+            <div class="c-top"><span class="c-num">P-001</span><span class="c-focus">R&amp;D · DSP · Crypto</span></div>
+            <div class="c-name">Stateful Audio<br>Watermarking</div>
+            <div class="c-tech"><span class="tb">Rust</span><span class="tb a">DSP</span><span class="tb a">Cryptography</span></div>
+            <div class="c-desc">Multi-layer audio watermarking in Rust. State-dependent transformation pipeline chains cryptographic sequences over time — tamper-evident and resilient to noise attacks.</div>
+            <div class="c-foot">
+              <div class="c-stat"><div class="si si-y"></div><span class="pat">PATENT PENDING</span></div>
+              <span class="c-arr">→</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="c-top"><span class="c-num">P-002</span><span class="c-focus">Cloud · Observability</span></div>
+            <div class="c-name">Chiliz Testnet<br>Node Automation</div>
+            <div class="c-tech"><span class="tb">Go</span><span class="tb">Ansible</span><span class="tb a">Prometheus</span><span class="tb a">Grafana</span></div>
+            <div class="c-desc">End-to-end deployment pipeline for Chiliz Spicy Testnet nodes. Ansible manages compilation and systemd lifecycle. Full telemetry via Prometheus + Grafana. Nginx for secure RPC exposure.</div>
+            <div class="c-foot">
+              <div class="c-stat"><div class="si si-t"></div><span>production-grade</span></div>
+              <span class="c-arr">→</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="c-top"><span class="c-num">P-003</span><span class="c-focus">Systems · Virtualisation</span></div>
+            <div class="c-name">ArchPass</div>
+            <div class="c-tech"><span class="tb">C</span><span class="tb a">Virtualisation</span><span class="tb a">CLI</span></div>
+            <div class="c-desc">CLI hypervisor manager automating ephemeral Arch Linux environments. Abstracts QEMU complexity behind a clean interface — setup from hours to seconds. Modular, extensible across distros.</div>
+            <div class="c-foot">
+              <div class="c-stat"><div class="si si-g"></div><span>extending distro support</span></div>
+              <span class="c-arr">→</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="c-top"><span class="c-num">P-004</span><span class="c-focus">OS · Kernel Internals</span></div>
+            <div class="c-name">Linux From<br>Scratch</div>
+            <div class="c-tech"><span class="tb">GCC</span><span class="tb">Make</span><span class="tb">Bash</span><span class="tb a">Kernel</span></div>
+            <div class="c-desc">Built a complete Linux system from source, compiled the entire toolchain, kernel, and other core dependencies with a custom written package manager written in C.</div>
+            <div class="c-foot">
+              <div class="c-stat"><div class="si si-t"></div><span>kernel compiled</span></div>
+              <span class="c-arr">→</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="c-top"><span class="c-num">P-005</span><span class="c-focus">Hardware Arch · ISA</span></div>
+            <div class="c-name">CHIP-8<br>Emulator</div>
+            <div class="c-tech"><span class="tb">Rust</span><span class="tb a">CPU Emulation</span><span class="tb a">Opcodes</span></div>
+            <div class="c-desc">Low-level VM implementing the CHIP-8 instruction set. Registers, program counters, stack pointers, full opcode execution cycles — bridges high-level code to hardware in memory-safe Rust.</div>
+            <div class="c-foot">
+              <div class="c-stat"><div class="si si-t"></div><span>35 opcodes implemented</span></div>
+              <span class="c-arr">→</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="c-top"><span class="c-num">P-006</span><span class="c-focus">Network · Concurrency</span></div>
+            <div class="c-name">Multithreaded<br>Network Engine</div>
+            <div class="c-tech"><span class="tb">Rust</span><span class="tb a">HTTP/1.1</span><span class="tb a">Thread Pool</span></div>
+            <div class="c-desc">Custom HTTP/1.1 engine — zero frameworks. Manually implements the parser, socket handling, and thread-pool orchestration. Raw network concurrency and memory safety from scratch.</div>
+            <div class="c-foot">
+              <div class="c-stat"><div class="si si-g"></div><span>zero-dependency</span></div>
+              <span class="c-arr">→</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  var D=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function tick(){
+    var n=new Date();
+    document.getElementById('clk').textContent=
+      String(n.getHours()).padStart(2,'0')+':'+
+      String(n.getMinutes()).padStart(2,'0')+':'+
+      String(n.getSeconds()).padStart(2,'0');
+    document.getElementById('bdate').textContent=
+      D[n.getDay()]+' '+n.getDate()+' '+M[n.getMonth()];
+  }
+  tick(); setInterval(tick,1000);
+  function cpu(){document.getElementById('cpu').textContent=Math.floor(Math.random()*7+1)+'%';}
+  cpu(); setInterval(cpu,2800);
+})();
+</script>
+</body>
+</html>
