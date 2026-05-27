@@ -12,21 +12,10 @@
   --win:    #0f0f0f;
   --win2:   #111111;
   --tbar:   #080808;
-  --bact:   #e0e0e0;
-  --binact: #222222;
-  --hover:  #333333;
-  --grn:    #888888;
-  --grn-d:  #aaaaaa;
-  --grn-m:  #2a2a2a;
-  --teal:   #cccccc;
-  --teal-d: #999999;
-  --teal-m: #1e1e1e;
-  --yellow: #bbbbbb;
-  --txt:    #d4d4d4;
-  --txt-d:  #555555;
-  --txt-m:  #1e1e1e;
-  --gap:    0px;
-  --rad:    0px;
+  --txt:    #f0f0f0;
+  --sub:    #aaaaaa;
+  --border-idle:  #888888;
+  --border-hover: #ffffff;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,115 +30,35 @@ html, body {
 .bar {
   height: 30px;
   background: #050505;
-  border-bottom: 1px solid #1a1a1a;
+  border-bottom: 1px solid #333333;
   display: flex; align-items: center;
-  padding: 0 12px; gap: 0;
+  padding: 0 12px;
   flex-shrink: 0;
   position: relative;
 }
-
 .bar-l { display: flex; align-items: center; gap: 2px; }
-.bar-c {
-  position: absolute; left: 50%; transform: translateX(-50%);
-  font-size: 10px; color: var(--txt-d); letter-spacing: .06em;
-}
+.bar-c { position: absolute; left: 50%; transform: translateX(-50%); font-size: 10px; color: #aaaaaa; letter-spacing: .06em; }
 .bar-r { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 9.5px; }
+.ws { width: 26px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: default; letter-spacing: .02em; }
+.ws.on  { background: #2a2a2a; color: #f0f0f0; border: 1px solid #888888; }
+.ws.off { color: #aaaaaa; }
+.bsep { color: #444444; }
+.bstat { color: #aaaaaa; }
+.bstat b { color: #f0f0f0; font-weight: 400; }
+.btime { color: #aaaaaa; font-weight: 500; letter-spacing: .04em; }
 
-.ws {
-  width: 26px; height: 20px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 0; font-size: 10px; cursor: default;
-  letter-spacing: .02em;
-}
-.ws.on  { background: #1e1e1e; color: #cccccc; border: 1px solid #444444; }
-.ws.off { color: var(--txt-d); }
+.desk { height: calc(100vh - 30px); display: flex; overflow: hidden; }
 
-.bsep { color: #1e1e1e; }
-.bstat { color: var(--txt-d); }
-.bstat b { color: var(--txt); font-weight: 400; }
-.btime { color: #999999; font-weight: 500; letter-spacing: .04em; }
-
-.desk {
-  height: calc(100vh - 30px);
-  display: flex;
-  overflow: hidden;
-}
-
-/* pane borders via box-shadow / outline — no gap */
-.win {
-  background: var(--win);
-  border: 1px solid #1a1a1a;
-  border-radius: 0;
-  overflow: hidden;
-  display: flex; flex-direction: column;
-  transition: border-color .2s;
-}
-/* whoami + experience: border only on hover */
-.win.hover-only { border-color: transparent; }
-.win.hover-only:hover { border-color: #444444; }
-
-/* projects: always-on tmux style */
-.win.tmux-active {
-  border: 1px solid #444444;
-  position: relative;
-}
-
-.wbar {
-  height: 28px; background: var(--tbar);
-  border-bottom: 1px solid #1a1a1a;
-  display: flex; align-items: center;
-  padding: 0 11px; gap: 8px; flex-shrink: 0;
-}
-
-/* tmux tab on projects window */
-.tmux-tab {
-  display: flex; align-items: stretch;
-  height: 100%; gap: 0;
-}
-.tmux-tab-item {
-  display: flex; align-items: center;
-  padding: 0 12px;
-  font-size: 9.5px; letter-spacing: .04em;
-  border-right: 1px solid #1a1a1a;
-}
-.tmux-tab-item.act {
-  background: #1a1a1a;
-  color: #cccccc;
-}
-.tmux-tab-item.act::before {
-  content: '';
-  display: inline-block;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #888888;
-  margin-right: 6px;
-}
-.tmux-tab-item.inact { color: #333333; }
-.tmux-r {
-  margin-left: auto;
-  display: flex; align-items: center;
-  padding: 0 10px;
-  font-size: 9px; color: #333333; letter-spacing: .06em;
-}
-
-.wdots { display: flex; gap: 6px; }
-.wd { width: 8px; height: 8px; border-radius: 50%; background: #222; }
-
-.wt { font-size: 10px; letter-spacing: .04em; color: var(--txt-d); }
-.win.hover-only:hover .wt { color: var(--txt); }
-.win.tmux-active .wt { color: var(--txt); }
-
-.col-l { width: 248px; flex-shrink: 0; border-right: 1px solid #1a1a1a; }
-.col-l .win { height: 100%; border: none; }
-.col-l .win:hover { border: none; }
+/* LEFT COLUMN */
+.col-l { width: 248px; flex-shrink: 0; }
 .col-l-inner {
   height: 100%;
-  border: 1px solid transparent;
-  transition: border-color .2s;
+  border: 1px solid var(--border-idle);
+  transition: border-color .15s;
   display: flex; flex-direction: column;
 }
-.col-l-inner:hover { border-color: #444444; }
-
+.col-l-inner:hover { border-color: var(--border-hover); }
+.col-l-inner:hover .wt { color: #f0f0f0; }
 .col-l .wbody {
   flex: 1; overflow-y: auto;
   padding: 13px 14px;
@@ -158,66 +67,77 @@ html, body {
 }
 .col-l .wbody::-webkit-scrollbar { display: none; }
 
-.name {
-  font-size: 19px; font-weight: 700;
-  color: #cccccc; letter-spacing: .03em;
-  line-height: 1.1; margin-bottom: 3px;
+.wbar {
+  height: 28px; background: var(--tbar);
+  border-bottom: 1px solid #2a2a2a;
+  display: flex; align-items: center;
+  padding: 0 11px; gap: 8px; flex-shrink: 0;
 }
-.role-lbl { color: var(--txt-d); font-size: 9px; letter-spacing: .12em; margin-bottom: 8px; }
-.avail { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--txt-d); }
-.dot-pulse {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #888888; flex-shrink: 0;
-  animation: pulse 2.2s ease-in-out infinite;
-}
+.wdots { display: flex; gap: 6px; }
+.wd { width: 8px; height: 8px; border-radius: 50%; background: #333; }
+.wt { font-size: 10px; letter-spacing: .04em; color: var(--sub); transition: color .15s; }
+
+.name { font-size: 19px; font-weight: 700; color: #ffffff; letter-spacing: .03em; line-height: 1.1; margin-bottom: 3px; }
+.role-lbl { color: var(--sub); font-size: 9px; letter-spacing: .12em; margin-bottom: 8px; }
+.avail { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--sub); }
+.dot-pulse { width: 6px; height: 6px; border-radius: 50%; background: #cccccc; flex-shrink: 0; animation: pulse 2.2s ease-in-out infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.15} }
-
-.div { height: 1px; background: #1a1a1a; margin: 10px 0; flex-shrink: 0; }
-
-.slbl { font-size: 8.5px; color: #444444; letter-spacing: .14em; margin-bottom: 5px; }
-
-.about { font-size: 9.5px; color: var(--txt-d); line-height: 1.65; }
+.div { height: 1px; background: #2a2a2a; margin: 10px 0; flex-shrink: 0; }
+.slbl { font-size: 8.5px; color: var(--sub); letter-spacing: .14em; margin-bottom: 5px; }
+.about { font-size: 9.5px; color: var(--sub); line-height: 1.65; }
 .sg { margin-bottom: 7px; }
 .sg:last-child { margin-bottom: 0; }
-.sg-h { font-size: 8px; color: #666666; letter-spacing: .12em; margin-bottom: 3px; font-weight: 500; }
+.sg-h { font-size: 8px; color: var(--sub); letter-spacing: .12em; margin-bottom: 3px; font-weight: 500; }
 .tags { display: flex; flex-wrap: wrap; gap: 3px; }
-.tag {
-  border: 1px solid #222222; color: var(--txt-d);
-  font-size: 8px; padding: 1px 6px; border-radius: 0;
+.tag { border: 1px solid #333333; color: var(--sub); font-size: 8px; padding: 1px 6px; }
+.tag.hi { border-color: #777777; color: #e8e8e8; }
+.lnk { display: flex; align-items: center; gap: 7px; color: var(--sub); text-decoration: none; font-size: 9.5px; padding: 2.5px 0; transition: color .15s; }
+.lnk:hover { color: #f0f0f0; }
+.li { color: var(--sub); width: 10px; text-align: center; font-size: 10px; flex-shrink: 0; }
+
+/* RIGHT COLUMN */
+.col-r { flex: 1; display: flex; flex-direction: column; overflow: hidden; gap: 6px; padding: 6px; }
+
+/* EXPERIENCE PANE */
+.win-exp {
+  flex-shrink: 0;
+  border: 1px solid var(--border-idle);
+  background: var(--win);
+  display: flex; flex-direction: column;
+  transition: border-color .15s;
+  overflow: hidden;
 }
-.tag.hi { border-color: #3a3a3a; color: #999999; }
-
-.lnk {
-  display: flex; align-items: center; gap: 7px;
-  color: var(--txt-d); text-decoration: none;
-  font-size: 9.5px; padding: 2.5px 0;
-  transition: color .15s;
-}
-.lnk:hover { color: #cccccc; }
-.li { color: #333333; width: 10px; text-align: center; font-size: 10px; flex-shrink: 0; }
-
-.col-r { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-
-/* experience row */
-.win-exp { flex-shrink: 0; border-bottom: 1px solid #1a1a1a; }
-.win-exp.hover-only { border-bottom-color: #1a1a1a !important; }
+.win-exp:hover { border-color: var(--border-hover); }
+.win-exp:hover .wt { color: #f0f0f0; }
 .win-exp .wbody {
   padding: 10px 14px;
   display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
 }
+.exp-co { font-size: 9.5px; color: #cccccc; letter-spacing: .05em; }
+.exp-role { font-size: 9px; color: #f0f0f0; margin-top: 2px; }
+.exp-date { font-size: 8px; color: var(--sub); margin-top: 2px; }
+.exp-note { margin-top: 4px; font-size: 8px; color: var(--sub); display: flex; align-items: flex-start; gap: 4px; line-height: 1.5; }
+.exp-note::before { content: '▸'; color: var(--sub); flex-shrink: 0; margin-top: 1px; }
 
-.exp-co { font-size: 9.5px; font-weight: 400; color: var(--txt-d); letter-spacing: .05em; }
-.exp-role { font-size: 9px; color: var(--txt); margin-top: 2px; }
-.exp-date { font-size: 8px; color: var(--txt-d); opacity: .55; margin-top: 2px; }
-.exp-note {
-  margin-top: 4px; font-size: 8px; color: var(--txt-d); opacity: .7;
-  display: flex; align-items: flex-start; gap: 4px; line-height: 1.5;
+/* PROJECTS PANE */
+.win-proj {
+  flex: 1;
+  border: 1px solid var(--border-idle);
+  background: var(--win);
+  display: flex; flex-direction: column;
+  transition: border-color .15s;
+  overflow: hidden;
 }
-.exp-note::before { content: '▸'; color: #555555; flex-shrink: 0; margin-top: 1px; }
-
-/* projects */
-.win-proj { flex: 1; }
+.win-proj:hover { border-color: var(--border-hover); }
+.win-proj:hover .wt { color: #f0f0f0; }
 .win-proj .wbody { flex: 1; padding: 8px 10px; overflow: hidden; }
+
+.tmux-tab { display: flex; align-items: stretch; height: 100%; }
+.tmux-tab-item { display: flex; align-items: center; padding: 0 12px; font-size: 9.5px; letter-spacing: .04em; border-right: 1px solid #2a2a2a; }
+.tmux-tab-item.act { background: #1e1e1e; color: #f0f0f0; }
+.tmux-tab-item.act::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #cccccc; margin-right: 6px; }
+.tmux-tab-item.inact { color: var(--sub); }
+.tmux-r { margin-left: auto; display: flex; align-items: center; padding: 0 10px; font-size: 9px; color: var(--sub); letter-spacing: .06em; }
 
 .pgrid {
   display: grid;
@@ -225,97 +145,55 @@ html, body {
   grid-template-rows: repeat(2, 1fr);
   gap: 1px;
   height: 100%;
-  background: #1a1a1a;
-  outline: 1px solid #1a1a1a;
+  background: #2a2a2a;
 }
 
 .card {
   background: var(--win2);
-  border-radius: 0;
   padding: 10px 11px;
   display: flex; flex-direction: column;
   overflow: hidden;
   transition: background .15s;
 }
-.card:hover { background: #181818; }
+.win-proj:hover .card { background: #141414; }
+.win-proj:hover .c-name { color: #ffffff; }
+.win-proj:hover .c-desc { color: var(--sub); }
+.win-proj:hover .c-arr { color: #e0e0e0; }
 
-.c-top {
-  display: flex; align-items: flex-start;
-  justify-content: space-between; margin-bottom: 4px;
-}
-.c-num { font-size: 8px; color: #2a2a2a; letter-spacing: .1em; }
-.c-focus { font-size: 7.5px; color: #3a3a3a; text-align: right; max-width: 110px; }
-
-.c-name {
-  font-size: 11px; font-weight: 600; color: #999999;
-  margin-bottom: 4px; line-height: 1.25;
-  transition: color .2s;
-}
-.card:hover .c-name { color: #d4d4d4; }
-
+.c-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
+.c-num { font-size: 8px; color: var(--sub); letter-spacing: .1em; }
+.c-focus { font-size: 7.5px; color: var(--sub); text-align: right; max-width: 110px; }
+.c-name { font-size: 11px; font-weight: 600; color: #d0d0d0; margin-bottom: 4px; line-height: 1.25; transition: color .15s; }
 .c-tech { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 5px; }
-.tb {
-  border: 1px solid #2a2a2a; color: #666666;
-  font-size: 7.5px; padding: 1px 5px; border-radius: 0;
-}
-.tb.a { border-color: #1e1e1e; color: #3a3a3a; }
-
-.c-desc {
-  font-size: 8.5px; color: #444444; line-height: 1.6;
-  flex: 1; overflow: hidden;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-}
-.card:hover .c-desc { color: #555555; }
-
-.c-foot {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding-top: 6px; margin-top: auto;
-  border-top: 1px solid #1a1a1a;
-}
-.c-stat { display: flex; align-items: center; gap: 4px; font-size: 8px; color: #3a3a3a; }
+.tb { border: 1px solid #3a3a3a; color: var(--sub); font-size: 7.5px; padding: 1px 5px; }
+.tb.a { border-color: #2a2a2a; color: var(--sub); }
+.c-desc { font-size: 8.5px; color: var(--sub); line-height: 1.6; flex: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; transition: color .15s; }
+.c-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; margin-top: auto; border-top: 1px solid #2a2a2a; }
+.c-stat { display: flex; align-items: center; gap: 4px; font-size: 8px; color: var(--sub); }
 .si { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.si-g { background: #555555; }
-.si-t { background: #666666; }
-.si-y { background: #444444; }
-.pat {
-  background: transparent;
-  border: 1px solid #333333;
-  color: #666666; font-size: 7px;
-  padding: 1px 4px; border-radius: 0;
-  font-weight: 700; letter-spacing: .06em;
-}
-.c-arr { font-size: 9px; color: #2a2a2a; transition: color .2s, transform .2s; }
-.card:hover .c-arr { color: #888888; transform: translateX(2px); }
+.si-g { background: #aaaaaa; }
+.si-t { background: #888888; }
+.si-y { background: #cccccc; }
+.pat { background: transparent; border: 1px solid #666666; color: #cccccc; font-size: 7px; padding: 1px 4px; font-weight: 700; letter-spacing: .06em; }
+.c-arr { font-size: 9px; color: var(--sub); transition: color .15s; }
 
-/* tmux status line at bottom of projects */
 .tmux-status {
-  height: 20px;
-  background: #0a0a0a;
-  border-top: 1px solid #1a1a1a;
+  height: 20px; background: #0a0a0a;
+  border-top: 1px solid #2a2a2a;
   display: flex; align-items: center;
-  padding: 0 10px; gap: 0;
-  flex-shrink: 0;
+  padding: 0 10px; flex-shrink: 0;
 }
-.ts-seg {
-  display: flex; align-items: center;
-  padding: 0 8px; height: 100%;
-  font-size: 8.5px; letter-spacing: .06em;
-}
-.ts-seg.act { background: #1e1e1e; color: #888888; }
-.ts-seg.norm { color: #333333; }
-.ts-sep { color: #1e1e1e; }
-.ts-r { margin-left: auto; color: #2a2a2a; font-size: 8px; letter-spacing: .08em; }
+.ts-seg { display: flex; align-items: center; padding: 0 8px; height: 100%; font-size: 8.5px; letter-spacing: .06em; }
+.ts-seg.act { background: #2a2a2a; color: #cccccc; }
+.ts-seg.norm { color: var(--sub); }
+.ts-r { margin-left: auto; color: var(--sub); font-size: 8px; letter-spacing: .08em; }
 </style>
 </head>
 <body>
 
 <div class="bar">
   <div class="bar-l">
-    <div class="ws on">1</div>
-    <div class="ws off">2</div>
-    <div class="ws off">3</div>
-    <div class="ws off">4</div>
+    <div class="ws on">1</div><div class="ws off">2</div><div class="ws off">3</div><div class="ws off">4</div>
   </div>
   <div class="bar-c">naveen@arch &nbsp;—&nbsp; ~/portfolio</div>
   <div class="bar-r">
@@ -331,7 +209,6 @@ html, body {
 
 <div class="desk">
 
-  <!-- LEFT -->
   <div class="col-l">
     <div class="col-l-inner">
       <div class="wbar">
@@ -339,18 +216,13 @@ html, body {
         <span class="wt">~/whoami</span>
       </div>
       <div class="wbody">
-
         <div class="name">NAVEEN<br>BHARATH</div>
         <div class="role-lbl">BACKEND · SYSTEMS · INFRASTRUCTURE</div>
         <div class="avail"><div class="dot-pulse"></div><span>open to roles</span></div>
-
         <div class="div"></div>
-
         <div class="slbl">ABOUT</div>
         <div class="about">Systems &amp; Backend Engineer. Working actively on low-level tooling, linux infrastructure, distributed systems, and building performant backends.</div>
-
         <div class="div"></div>
-
         <div class="slbl">SKILLS</div>
         <div>
           <div class="sg">
@@ -381,25 +253,20 @@ html, body {
             </div>
           </div>
         </div>
-
         <div class="div"></div>
-
         <div class="slbl">CONTACT</div>
         <a class="lnk" href="https://github.com/Skywalkr-dev" target="_blank"><span class="li">⌥</span>github.com/Skywalkr-dev</a>
         <a class="lnk" href="https://linkedin.com/in/naveen-bharath-s" target="_blank"><span class="li">▸</span>linkedin/naveen-bharath-s</a>
         <a class="lnk" href="https://leetcode.com/u/Skywalkr-dev/" target="_blank"><span class="li">◈</span>leetcode/Skywalkr-dev</a>
         <a class="lnk" href="mailto:snaveenbharath2005@gmail.com"><span class="li">✉</span>snaveenbharath2005@gmail.com</a>
         <a class="lnk" href="https://x.com/nav_py" target="_blank"><span class="li">✕</span>x.com/nav_py</a>
-
       </div>
     </div>
   </div>
 
-  <!-- RIGHT -->
   <div class="col-r">
 
-    <!-- experience: hover border -->
-    <div class="win win-exp hover-only" style="border-left:none; border-right:none; border-top:none;">
+    <div class="win-exp">
       <div class="wbar">
         <div class="wdots"><div class="wd"></div><div class="wd"></div><div class="wd"></div></div>
         <span class="wt">experience.log</span>
@@ -420,9 +287,8 @@ html, body {
       </div>
     </div>
 
-    <!-- projects: tmux style, always bordered -->
-    <div class="win win-proj tmux-active" style="border-left:none; border-right:none; border-bottom:none;">
-      <div class="wbar" style="padding:0; border-bottom: 1px solid #222;">
+    <div class="win-proj">
+      <div class="wbar" style="padding:0; border-bottom: 1px solid #2a2a2a;">
         <div class="tmux-tab">
           <div class="tmux-tab-item act">1:projects</div>
           <div class="tmux-tab-item inact">2:readme</div>
@@ -438,10 +304,7 @@ html, body {
             <div class="c-name">Stateful Audio<br>Watermarking</div>
             <div class="c-tech"><span class="tb">Rust</span><span class="tb a">DSP</span><span class="tb a">Cryptography</span></div>
             <div class="c-desc">Multi-layer audio watermarking in Rust. State-dependent transformation pipeline chains cryptographic sequences over time — tamper-evident and resilient to noise attacks.</div>
-            <div class="c-foot">
-              <div class="c-stat"><div class="si si-y"></div><span class="pat">PATENT PENDING</span></div>
-              <span class="c-arr">→</span>
-            </div>
+            <div class="c-foot"><div class="c-stat"><div class="si si-y"></div><span class="pat">PATENT PENDING</span></div><span class="c-arr">→</span></div>
           </div>
 
           <div class="card">
@@ -449,10 +312,7 @@ html, body {
             <div class="c-name">Chiliz Testnet<br>Node Automation</div>
             <div class="c-tech"><span class="tb">Go</span><span class="tb">Ansible</span><span class="tb a">Prometheus</span><span class="tb a">Grafana</span></div>
             <div class="c-desc">End-to-end deployment pipeline for Chiliz Spicy Testnet nodes. Ansible manages compilation and systemd lifecycle. Full telemetry via Prometheus + Grafana. Nginx for secure RPC exposure.</div>
-            <div class="c-foot">
-              <div class="c-stat"><div class="si si-t"></div><span>production-grade</span></div>
-              <span class="c-arr">→</span>
-            </div>
+            <div class="c-foot"><div class="c-stat"><div class="si si-t"></div><span>production-grade</span></div><span class="c-arr">→</span></div>
           </div>
 
           <div class="card">
@@ -460,10 +320,7 @@ html, body {
             <div class="c-name">ArchPass</div>
             <div class="c-tech"><span class="tb">C</span><span class="tb a">Virtualisation</span><span class="tb a">CLI</span></div>
             <div class="c-desc">CLI hypervisor manager automating ephemeral Arch Linux environments. Abstracts QEMU complexity behind a clean interface — setup from hours to seconds. Modular, extensible across distros.</div>
-            <div class="c-foot">
-              <div class="c-stat"><div class="si si-g"></div><span>extending distro support</span></div>
-              <span class="c-arr">→</span>
-            </div>
+            <div class="c-foot"><div class="c-stat"><div class="si si-g"></div><span>extending distro support</span></div><span class="c-arr">→</span></div>
           </div>
 
           <div class="card">
@@ -471,10 +328,7 @@ html, body {
             <div class="c-name">Linux From<br>Scratch</div>
             <div class="c-tech"><span class="tb">GCC</span><span class="tb">Make</span><span class="tb">Bash</span><span class="tb a">Kernel</span></div>
             <div class="c-desc">Built a complete Linux system from source, compiled the entire toolchain, kernel, and other core dependencies with a custom written package manager written in C.</div>
-            <div class="c-foot">
-              <div class="c-stat"><div class="si si-t"></div><span>kernel compiled</span></div>
-              <span class="c-arr">→</span>
-            </div>
+            <div class="c-foot"><div class="c-stat"><div class="si si-t"></div><span>kernel compiled</span></div><span class="c-arr">→</span></div>
           </div>
 
           <div class="card">
@@ -482,10 +336,7 @@ html, body {
             <div class="c-name">CHIP-8<br>Emulator</div>
             <div class="c-tech"><span class="tb">Rust</span><span class="tb a">CPU Emulation</span><span class="tb a">Opcodes</span></div>
             <div class="c-desc">Low-level VM implementing the CHIP-8 instruction set. Registers, program counters, stack pointers, full opcode execution cycles — bridges high-level code to hardware in memory-safe Rust.</div>
-            <div class="c-foot">
-              <div class="c-stat"><div class="si si-t"></div><span>35 opcodes implemented</span></div>
-              <span class="c-arr">→</span>
-            </div>
+            <div class="c-foot"><div class="c-stat"><div class="si si-t"></div><span>35 opcodes implemented</span></div><span class="c-arr">→</span></div>
           </div>
 
           <div class="card">
@@ -493,10 +344,7 @@ html, body {
             <div class="c-name">Multithreaded<br>Network Engine</div>
             <div class="c-tech"><span class="tb">Rust</span><span class="tb a">HTTP/1.1</span><span class="tb a">Thread Pool</span></div>
             <div class="c-desc">Custom HTTP/1.1 engine — zero frameworks. Manually implements the parser, socket handling, and thread-pool orchestration. Raw network concurrency and memory safety from scratch.</div>
-            <div class="c-foot">
-              <div class="c-stat"><div class="si si-g"></div><span>zero-dependency</span></div>
-              <span class="c-arr">→</span>
-            </div>
+            <div class="c-foot"><div class="c-stat"><div class="si si-g"></div><span>zero-dependency</span></div><span class="c-arr">→</span></div>
           </div>
 
         </div>
@@ -518,8 +366,7 @@ html, body {
   var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function tick(){
     var n=new Date();
-    var t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
-    document.getElementById('clk').textContent=t;
+    document.getElementById('clk').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
     document.getElementById('tmux-time').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
     document.getElementById('bdate').textContent=D[n.getDay()]+' '+n.getDate()+' '+M[n.getMonth()];
   }
