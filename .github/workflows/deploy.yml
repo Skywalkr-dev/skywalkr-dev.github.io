@@ -43,20 +43,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-      ```
-
----
-
-### Step 2: Set your base path in `vite.config.ts`
-Vite needs to know if it's being hosted at the root domain (`yourname.github.io`) or a subfolder (`yourname.github.io/repository-name`).
-
-Open your `vite.config.ts` file. If your repository name on GitHub is exactly `_portfolio_` (or whatever your repo name is), add the `base` property like this:
-
-```typescript
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-export default defineConfig({
-  plugins: [react()],
-  base: '/YOUR_REPOSITORY_NAME/', // <-- Change this to your exact GitHub repo name, keeping the slashes
-})
