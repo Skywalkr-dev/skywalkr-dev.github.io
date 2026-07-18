@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-
+import bgImage from './wallpaper.jpg';
 export default function Wallpaper() {
   const drops = useMemo(
     () =>
@@ -16,7 +16,7 @@ export default function Wallpaper() {
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden">
       <img
-        src={`${import.meta.env.BASE_URL}wallpaper.jpg`}
+        src={bgImage} 
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
         draggable={false}
