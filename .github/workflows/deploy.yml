@@ -1,0 +1,62 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - i3-gaps # Or whatever your main deployment branch is called
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      ```
+
+---
+
+### Step 2: Set your base path in `vite.config.ts`
+Vite needs to know if it's being hosted at the root domain (`yourname.github.io`) or a subfolder (`yourname.github.io/repository-name`).
+
+Open your `vite.config.ts` file. If your repository name on GitHub is exactly `_portfolio_` (or whatever your repo name is), add the `base` property like this:
+
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/YOUR_REPOSITORY_NAME/', // <-- Change this to your exact GitHub repo name, keeping the slashes
+})
