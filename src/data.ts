@@ -58,8 +58,8 @@ export const profile = {
 export const links: Link[] = [
   { label: 'GitHub', href: 'https://github.com/skywalkr-dev', icon: 'github' },
   { label: 'LeetCode', href: 'https://leetcode.com/skywalkr-dev', icon: 'code' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/s-naveen-bharath', icon: 'linkedin' },
-  { label: 'Email', href: 'mailto:skywalkr.dev@protonmail.com', icon: 'mail' },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/naveen-bharath-s', icon: 'linkedin' },
+  { label: 'Email', href: 'mailto:snaveenbharath2005@gmail.com', icon: 'mail' },
 ];
 
 export const experiences: Experience[] = [

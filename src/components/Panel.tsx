@@ -39,9 +39,9 @@ export default function Panel({
 }: Props) {
   return (
     <section
-      className={`glass glass-ripple scanlines relative flex min-h-0 flex-col overflow-hidden rounded-xl ${className}`}
+      className={`glass glass-ripple scanlines relative flex min-h-0 flex-col overflow-hidden rounded-xl bg-base/85 ${className}`}
     >
-      <div className="flex items-center gap-2 border-b border-teal/10 bg-mantle/40 px-3 py-1.5">
+      <div className="flex items-center gap-2 border-b border-teal/10 bg-mantle/80 px-3 py-1.5">
         <span className={`bar-dot ${dotMap[accent]}`} />
         <span className="truncate text-[11px] font-medium text-text">
           <span className={accentMap[accent]}>{title}</span>
